@@ -13,15 +13,11 @@ import com.google.zxing.qrcode.QRCodeReader;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Service;
 
-import javax.imageio.ImageIO;
 import java.awt.image.BufferedImage;
 import java.io.File;
 import java.io.FileOutputStream;
 import java.io.IOException;
-import java.util.ArrayList;
-import java.util.EnumMap;
-import java.util.List;
-import java.util.Map;
+import java.util.*;
 
 @Service
 public class QRCodeExtractorService {
@@ -57,12 +53,12 @@ public class QRCodeExtractorService {
     public List<String[]> processPDFs() throws IOException {
         List<String[]> data = new ArrayList<>();
         File dir = new File(directory);
-        for (File file : dir.listFiles()) {
+        for (File file : Objects.requireNonNull(dir.listFiles())) {
             if (file.getName().endsWith(".pdf")) {
                 System.out.println("Processing " + file.getName());
                 String qrContent = extractQRCode(file.getAbsolutePath());
                 String[] fields = qrContent != null ? qrContent.split(",") : new String[7];
-                data.add(concat(new String[]{file.getName()}, fields));
+                data.add(concatField(new String[]{file.getName()}, fields));
                 System.out.println("QR码内容: " + qrContent);
             }
         }
@@ -90,7 +86,7 @@ public class QRCodeExtractorService {
         workbook.close();
     }
 
-    private String[] concat(String[] first, String[] second) {
+    private String[] concatField(String[] first, String[] second) {
         String[] result = new String[first.length + second.length];
         System.arraycopy(first, 0, result, 0, first.length);
         System.arraycopy(second, 0, result, first.length, second.length);
