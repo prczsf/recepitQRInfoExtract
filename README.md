@@ -8,6 +8,7 @@
  mvn clean package
 在Target目录下找到生成的Jar文件
 
+
 ### 运行JAR文件
 
 您可以使用以下命令运行生成的JAR文件：
@@ -21,3 +22,5 @@ java -jar XXXXXX
 # 访问地址
 
 http://localhost:8088/api/extract
+
+等待一会，即可看到本地目录下多了一个output.xlsx文件
